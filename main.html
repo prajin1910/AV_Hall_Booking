@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. Joseph's Institute of Technology - AV HALL BOOKING</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #ff5a60;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        header h2 {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .logout-button:hover {
+            background-color: #0056b3;
+        }
+        .booking-section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .booking-section h2 {
+            margin-top: 0;
+            font-weight: 500;
+            font-size: 22px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group select {
+            height: 40px;
+        }
+        .form-group button {
+            background-color: #ff5a60;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #e04e55;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f1f1f1;
+            font-weight: 500;
+        }
+        td {
+            background-color: #fff;
+        }
+        .no-bookings {
+            text-align: center;
+            color: #888;
+            font-size: 16px;
+            padding: 20px;
+        }
+        .view-history-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .view-history-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 20px;
+            }
+            header h2 {
+                font-size: 16px;
+            }
+            .logout-button {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+            .form-group button {
+                width: 100%;
+                margin: 0;
+                padding: 12px;
+            }
+            .view-history-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 10px;
+            }
+            .container {
+                padding: 10px;
+            }
+            .booking-section, table {
+                margin-top: 15px;
+                padding: 15px;
+            }
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>St. Joseph's Institute of Technology</h1>
+        <h2>AV HALL BOOKING</h2>
+        <button class="logout-button" onclick="logout()">Logout</button>
+    </header>
+    <div class="container">
+        <div class="booking-section">
+            <h2>Book the AV Hall</h2>
+            <form id="bookingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacherName">Teacher Name:</label>
+                        <input type="text" id="teacherName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Reason for Booking:</label>
+                        <input type="text" id="reason" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="avHall">Select AV Hall:</label>
+                        <select id="avHall" required>
+                            <option value="">Select an AV Hall</option>
+                            <option value="AV Hall 1">AV Hall 1</option>
+                            <option value="AV Hall 2">AV Hall 2</option>
+                            <option value="AV Hall 3">AV Hall 3</option>
+                            <option value="AV Hall 4">AV Hall 4</option>
+                            <option value="AV Hall 5">AV Hall 5</option>
+                            <option value="AV Hall 6">AV Hall 6</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingDate">Date:</label>
+                        <input type="date" id="bookingDate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startTime">Start Time:</label>
+                        <input type="time" id="startTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endTime">End Time:</label>
+                        <input type="time" id="endTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Book Now</button>
+                </div>
+            </form>
+        </div>
+
+        <h2>All Bookings</h2>
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Teacher Name</th>
+                    <th>Reason</th>
+                    <th>AV Hall</th>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="no-bookings">
+                    <td colspan="7">No bookings yet.</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="bookings.html" class="view-history-button">View Booking History</a>
+    </div>
+
+    <script>
+        // JavaScript code here (same as provided)
+        const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
+        const lastRefresh = localStorage.getItem('lastRefresh') ? new Date(localStorage.getItem('lastRefresh')) : new Date(0);
+
+        function refreshDataIfNeeded() {
+            const now = new Date();
+            if (now - lastRefresh > ONE_WEEK_MS) {
+                localStorage.removeItem('bookings'); // Clear bookings after a week
+                localStorage.setItem('lastRefresh', now.toISOString());
+                bookings.length = 0; // Clear in-memory bookings as well
+                updateBookingsTable(); // Update the table
+            }
+        }
+
+        function isTimeOverlap(start1, end1, start2, end2) {
+            return (start1 < end2 && end1 > start2);
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const teacherName = document.getElementById('teacherName').value;
+            const reason = document.getElementById('reason').value;
+            const avHall = document.getElementById('avHall').value;
+            const bookingDate = document.getElementById('bookingDate').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            // Validate inputs
+            if (!teacherName || !reason || !avHall || !bookingDate || !startTime || !endTime) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const bookingDateTime = new Date(`${bookingDate}T${startTime}`);
+            const bookingEndTime = new Date(`${bookingDate}T${endTime}`);
+
+            for (const booking of bookings) {
+                const bookedDateTime = new Date(`${booking.date}T${booking.startTime}`);
+                const bookedEndTime = new Date(`${booking.date}T${booking.endTime}`);
+
+                if (booking.avHall === avHall && booking.date === bookingDate && isTimeOverlap(bookingDateTime, bookingEndTime, bookedDateTime, bookedEndTime)) {
+                    alert(`The selected AV Hall is already booked from ${booking.startTime} to ${booking.endTime}. Please choose another time.`);
+                    return;
+                }
+            }
+
+            const newBooking = {
+                teacherName,
+                reason,
+                avHall,
+                date: bookingDate,
+                startTime,
+                endTime,
+                status: "Booked",
+            };
+
+            bookings.push(newBooking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            updateBookingsTable();
+            alert('AV Hall booked successfully!');
+            document.getElementById('bookingForm').reset();
+        });
+
+        function updateBookingsTable() {
+            const bookingsTableBody = document.querySelector('#bookingsTable tbody');
+            bookingsTableBody.innerHTML = '';
+
+            if (bookings.length === 0) {
+                const noBookingsRow = document.createElement('tr');
+                noBookingsRow.classList.add('no-bookings');
+                noBookingsRow.innerHTML = '<td colspan="7">No bookings yet.</td>';
+                bookingsTableBody.appendChild(noBookingsRow);
+            } else {
+                bookings.forEach((booking, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${booking.teacherName}</td>
+                        <td>${booking.reason}</td>
+                        <td>${booking.avHall}</td>
+                        <td>${booking.date}</td>
+                        <td>${booking.startTime}</td>
+                        <td>${booking.endTime}</td>
+                        <td>${booking.status}</td>
+                    `;
+                    bookingsTableBody.appendChild(row);
+
+                    const now = new Date();
+                    const bookingEndDateTime = new Date(`${booking.date}T${booking.endTime}`);
+                    if (now > bookingEndDateTime) {
+                        row.remove(); // Remove expired bookings
+                    } else if (now >= new Date(`${booking.date}T${booking.startTime}`) && now <= bookingEndDateTime) {
+                        booking.status = "Ongoing";
+                    } else {
+                        booking.status = "Booked";
+                    }
+                });
+
+                // Save updated bookings back to localStorage
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+            }
+        }
+
+        function logout() {
+            localStorage.clear(); // Clear all data stored in localStorage (bookings, login status, etc.)
+            window.location.href = "index.html"; // Redirect to the login page
+        }
+
+        refreshDataIfNeeded(); // Call refreshDataIfNeeded before updating the table
+        updateBookingsTable(); // Initial table update
+    </script>
+</body>
+</html>
